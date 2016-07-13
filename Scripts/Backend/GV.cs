@@ -5,8 +5,8 @@ public class GV {
 
     public enum CurrentPanel { Empty, Message, Profile }
 
-    public static MainMenuRefs mainMenuRefs;
-    public static ReportBanRefs reportBanRefs;
+    public static MainMenuUILinks mainMenuUILinks;
+    public static ReportBanUILinks reportBanUILinks;
     public static AccountRetriever accountRetriever = new AccountRetriever();
     public static FakeServer fakeServer = new FakeServer();
 

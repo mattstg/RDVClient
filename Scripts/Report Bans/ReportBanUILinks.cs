@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ReportBanRefs : MonoBehaviour {
+public class ReportBanUILinks : MonoBehaviour {
 
     public Transform userListGrid;
     public Transform messageGrid;
     public Transform profileGrid;
     public BanReportMS banReportMS;
     public ConvoPopup convoPopup;
+    public Transform dismissPopup;
+    public Transform banForgivePopup;
+    public Transform genericPopupParent;
     
 	void Awake () {
         banReportMS = GetComponent<BanReportMS>();
-        GV.reportBanRefs = this;
+        GV.reportBanUILinks = this;
 	}
 }

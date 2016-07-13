@@ -17,12 +17,12 @@ public class BanProfileManager : MonoBehaviour {
         {
             GameObject go = Instantiate(Resources.Load("Prefabs/DataSlot")) as GameObject;
             go.GetComponent<DataSlot>().Initialize(kv.Key, kv.Value);
-            go.transform.SetParent(GV.reportBanRefs.profileGrid);
+            go.transform.SetParent(GV.reportBanUILinks.profileGrid);
         }
     }
 
     private void ClearAllDataSlots()
     {
-        GV.DeleteChildren(GV.reportBanRefs.profileGrid);
+        GV.DeleteChildren(GV.reportBanUILinks.profileGrid);
     }
 }

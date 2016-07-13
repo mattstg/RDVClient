@@ -30,9 +30,20 @@ public class AccountRetriever  {
     public List<FlaggedInfo> GetAllFlaggedInfos(int id)
     {
         List<FlaggedInfo> toRet = new List<FlaggedInfo>();
-        toRet.Add(new FlaggedInfo(new Date(10, 10, 1988), 1, 0, "Offensive"));
-        toRet.Add(new FlaggedInfo(new Date(10, 10, 2011), 2, 0, "Racist"));
+        toRet.Add(new FlaggedInfo(new Date(10, 10, 1988), 1, "charcoalLover", 0, "Offensive"));
+        toRet.Add(new FlaggedInfo(new Date(10, 10, 2011), 2, "J.R.R Tokien", 0, "Racist"));
         return toRet;
+    }
+
+    public void DeleteBlockFromServer(FlaggedInfo fi)
+    {
+        Debug.Log("delete from server called");
+
+    }
+
+    public string AccountNameByID(int id)
+    {
+        return "henri hill";
     }
 
 }

@@ -4,24 +4,27 @@ using System.Collections;
 public class FlaggedInfo {
 
     public Date date;
-    public int senderId;
-    public int destId;
+    public int reporterID;
+    public int reportedID;
     public string reason;
+    public string reporterName;
 
-    public FlaggedInfo(Date _date, int _reporterId, int _flaggedId, string _reason)
+    public FlaggedInfo(Date _date, int _reporterId, string _reporterName, int _flaggedId, string _reason)
     {
         date = _date;
-        senderId = _reporterId;
-        destId = _flaggedId;
+        reporterID = _reporterId;
+        reporterName = _reporterName;
+        reportedID = _flaggedId;
         reason = _reason;
     }
 
     public FlaggedInfo(FlaggedInfo _toCopy)
     {
         date = _toCopy.date;
-        senderId = _toCopy.senderId;
+        reporterID = _toCopy.reporterID;
         reason = _toCopy.reason;
-        destId = _toCopy.destId;
+        reportedID = _toCopy.reportedID;
+        reporterName = _toCopy.reporterName;
     }
 	
 }

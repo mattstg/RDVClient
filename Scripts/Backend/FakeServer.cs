@@ -32,6 +32,16 @@ public class FakeServer {
         return new List<string>();
     }
 
+    public string RetrieveSingleData(string command, int id)
+    {
+        switch (command)
+        {
+            case "name":
+                return "Henri Hill";
+        }
+        return " ";
+    }
+
     private Dictionary<string,string> getAccountBan(int id)
     {
         Dictionary<string, string> toRet = new Dictionary<string, string>();

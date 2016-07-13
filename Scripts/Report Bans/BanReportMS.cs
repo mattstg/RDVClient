@@ -24,16 +24,16 @@ public class BanReportMS : MonoBehaviour {
         foreach (int userid in flaggedUsers)
         {
             GameObject go = Instantiate(Resources.Load("Prefabs/UserButton")) as GameObject;
-            go.transform.SetParent(GV.reportBanRefs.userListGrid);
+            go.transform.SetParent(GV.reportBanUILinks.userListGrid);
             go.GetComponent<UserSlot>().Initialize(userid);
         }
     }
 
     void ClearUserList()
     {
-        foreach(Transform t in GV.reportBanRefs.userListGrid)
+        foreach(Transform t in GV.reportBanUILinks.userListGrid)
         {
-            if(t != GV.reportBanRefs.userListGrid)
+            if(t != GV.reportBanUILinks.userListGrid)
                 Destroy(t.gameObject);
         }
     }
@@ -45,8 +45,8 @@ public class BanReportMS : MonoBehaviour {
 
     void CloseAllPanels()
     {
-        GV.reportBanRefs.messageGrid.gameObject.SetActive(false);
-        GV.reportBanRefs.profileGrid.gameObject.SetActive(false);
+        GV.reportBanUILinks.messageGrid.gameObject.SetActive(false);
+        GV.reportBanUILinks.profileGrid.gameObject.SetActive(false);
     }
 
     public void OpenMessagePanelPressed()
@@ -54,8 +54,8 @@ public class BanReportMS : MonoBehaviour {
         CloseAllPanels();
         if (selectedID != -1)
         {
-            GV.reportBanRefs.messageGrid.gameObject.SetActive(true);
-            GV.reportBanRefs.messageGrid.GetComponent<BanMessageManager>().Initialize(selectedID);
+            GV.reportBanUILinks.messageGrid.gameObject.SetActive(true);
+            GV.reportBanUILinks.messageGrid.GetComponent<BanBlockSlotManager>().Initialize(selectedID);
         }
 
     }
@@ -65,17 +65,21 @@ public class BanReportMS : MonoBehaviour {
         CloseAllPanels();
         if (selectedID != -1)
         {
-            GV.reportBanRefs.profileGrid.gameObject.SetActive(true);
-            GV.reportBanRefs.profileGrid.GetComponent<BanProfileManager>().Initialize(selectedID);
+            GV.reportBanUILinks.profileGrid.gameObject.SetActive(true);
+            GV.reportBanUILinks.profileGrid.GetComponent<BanProfileManager>().Initialize(selectedID);
         }
     }
 
     public void UserSelected(int userID)
     {
         selectedID = userID;
-        Debug.Log("msg: " + selectedID);
         OpenMessagePanelPressed();
     }
-     
+
+    public void BanForgivePopupPressed()
+    {
+        GV.reportBanUILinks.banForgivePopup.gameObject.SetActive(true);
+        GV.reportBanUILinks.banForgivePopup.GetComponent<BanForgivePopup>().Initialize(selectedID);
+    }
 
 }

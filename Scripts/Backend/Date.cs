@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Date {
+public struct Date {
 
     public int day, month, year;
 

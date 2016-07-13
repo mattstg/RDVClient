@@ -15,7 +15,7 @@ public class UserSlot : MonoBehaviour {
 
     public void UserSlotPressed()
     {
-        GV.reportBanRefs.banReportMS.UserSelected(userID);
+        GV.reportBanUILinks.banReportMS.UserSelected(userID);
     }
 
 }
