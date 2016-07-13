@@ -47,39 +47,56 @@ public class BanReportMS : MonoBehaviour {
     {
         GV.reportBanUILinks.messageGrid.gameObject.SetActive(false);
         GV.reportBanUILinks.profileGrid.gameObject.SetActive(false);
+        GV.reportBanUILinks.pictureManager.gameObject.SetActive(false);
     }
 
-    public void OpenMessagePanelPressed()
+    public void OpenReportListPanel()
     {
         CloseAllPanels();
-        if (selectedID != -1)
-        {
-            GV.reportBanUILinks.messageGrid.gameObject.SetActive(true);
-            GV.reportBanUILinks.messageGrid.GetComponent<BanBlockSlotManager>().Initialize(selectedID);
-        }
-
+        GV.reportBanUILinks.messageGrid.gameObject.SetActive(true);
+        GV.reportBanUILinks.messageGrid.GetComponent<BanBlockSlotManager>().Initialize(selectedID);
     }
 
     public void OpenProfilePanelPressed()
     {
         CloseAllPanels();
-        if (selectedID != -1)
-        {
-            GV.reportBanUILinks.profileGrid.gameObject.SetActive(true);
-            GV.reportBanUILinks.profileGrid.GetComponent<BanProfileManager>().Initialize(selectedID);
-        }
+        GV.reportBanUILinks.profileGrid.gameObject.SetActive(true);
+        GV.reportBanUILinks.profileGrid.GetComponent<BanProfileManager>().Initialize(selectedID);
     }
 
     public void UserSelected(int userID)
     {
         selectedID = userID;
-        OpenMessagePanelPressed();
+        if (selectedID != -1)
+        {
+            GV.reportBanUILinks.navigationBar.gameObject.SetActive(true);
+            OpenReportListPanel();
+            GV.reportBanUILinks.headerText.text = GV.accountRetriever.AccountNameByID(selectedID) + " (" + selectedID + ")";
+        }
+        else
+        {
+            CloseAllPanels();
+            GV.reportBanUILinks.navigationBar.gameObject.SetActive(false);
+        }
     }
 
     public void BanForgivePopupPressed()
     {
         GV.reportBanUILinks.banForgivePopup.gameObject.SetActive(true);
         GV.reportBanUILinks.banForgivePopup.GetComponent<BanForgivePopup>().Initialize(selectedID);
+
+    }
+
+    public void SearchButtonPressed()
+    {
+        string searchRequest = GV.reportBanUILinks.searchBarInput.text;
+    }
+
+    public void OpenPicturePanel()
+    {
+        CloseAllPanels();
+        GV.reportBanUILinks.pictureManager.gameObject.SetActive(true);
+        GV.reportBanUILinks.pictureManager.Initialize(selectedID);
     }
 
 }

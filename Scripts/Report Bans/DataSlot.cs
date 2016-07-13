@@ -12,4 +12,13 @@ public class DataSlot : MonoBehaviour {
         varNameText.text = _varName;
         feild.text = value;
     }
+
+    public void ClickedOn()
+    {
+        GameObject go = Instantiate(Resources.Load("Prefabs/GenericPopup")) as GameObject;
+        go.transform.SetParent(GV.reportBanUILinks.genericPopupParent, false);
+        GenericPopup gpu = go.GetComponent<GenericPopup>();
+        gpu.SetMainText(varNameText.text + ": " + feild.text);
+        gpu.AddButton("Exit");
+    }
 }

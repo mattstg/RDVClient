@@ -43,11 +43,15 @@ public class BanForgivePopup : MonoBehaviour {
     {
         Debug.Log("BAN CONFIRMED");
         GV.DeleteChildren(GV.reportBanUILinks.genericPopupParent); //fix internal generic popup so it deletes itself
+        GV.reportBanUILinks.banReportMS.UserSelected(-1);
+        ClosePressed();
     }
 
     public void ForgiveConfirmed()
     {
         Debug.Log("FORGIVE CONFIRMED");
         GV.DeleteChildren(GV.reportBanUILinks.genericPopupParent);//fix internal generic popup so it deletes itself
+        GV.reportBanUILinks.banReportMS.UserSelected(-1);
+        ClosePressed();
     }
 }
