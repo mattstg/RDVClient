@@ -6,7 +6,7 @@ public class ReportBanUILinks : MonoBehaviour {
 
     public Transform navigationBar;
     public Transform userListGrid;
-    public Transform messageGrid;
+    public Transform reportGrid;
     public Transform profileGrid;
     public BanReportMS banReportMS;
     public ConvoPopup convoPopup;
@@ -16,6 +16,10 @@ public class ReportBanUILinks : MonoBehaviour {
     public Text headerText;
     public InputField searchBarInput;
     public PictureManager pictureManager;
+    public Transform jailImg;
+    public Transform banForgiveButton;
+    public Transform jailModeButton;
+    public Transform reviewModeButton;
     
 	void Awake () {
         banReportMS = GetComponent<BanReportMS>();

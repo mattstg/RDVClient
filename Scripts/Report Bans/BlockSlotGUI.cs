@@ -17,6 +17,7 @@ public class BlockSlotGUI : MonoBehaviour {
         reporterIDText.text = fi.reporterID.ToString();
         reporterNameText.text = fi.reporterName.ToString();
         dateText.text = fi.date.ToString();
+        reporterReasonText.text = fi.reason;
     }
 
     public void DeleteReportPressed()

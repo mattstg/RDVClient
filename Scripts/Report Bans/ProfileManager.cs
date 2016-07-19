@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BanProfileManager : MonoBehaviour {
+public class ProfileManager : MonoBehaviour {
 
-	public void Initialize(int id)
+	public void Initialize(string id)
     {
         LoadAllDataSlots(id);
     }
 
-    private void LoadAllDataSlots(int id)
+    private void LoadAllDataSlots(string id)
     {
         ClearAllDataSlots();
         Dictionary<string, string> dict = GV.accountRetriever.GetAccountInfo(id);

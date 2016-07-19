@@ -21,7 +21,9 @@ public class GenericPopup : MonoBehaviour {
         GameObject go = Instantiate(Resources.Load("Prefabs/GenericButton")) as GameObject;
         go.transform.SetParent(buttonGrid);
         UnityEngine.Events.UnityAction castedCallback = new UnityEngine.Events.UnityAction(callbackFunc);
+        UnityEngine.Events.UnityAction castedCallbackClose = new UnityEngine.Events.UnityAction(ClosePressed);
         go.GetComponent<Button>().onClick.AddListener(castedCallback);
+        go.GetComponent<Button>().onClick.AddListener(castedCallbackClose);
         go.GetComponent<Button>().GetComponentInChildren<Text>().text = buttonText;
     }
 
@@ -37,5 +39,12 @@ public class GenericPopup : MonoBehaviour {
     public void ClosePressed()
     {
         Destroy(this.gameObject);
+    }
+
+    public static GenericPopup CreateGenericPopup()
+    {
+        GameObject go = Instantiate(Resources.Load("Prefabs/GenericPopup")) as GameObject;
+        go.transform.SetParent(GV.reportBanUILinks.genericPopupParent, false);
+        return go.GetComponent<GenericPopup>();
     }
 }

@@ -15,9 +15,7 @@ public class DataSlot : MonoBehaviour {
 
     public void ClickedOn()
     {
-        GameObject go = Instantiate(Resources.Load("Prefabs/GenericPopup")) as GameObject;
-        go.transform.SetParent(GV.reportBanUILinks.genericPopupParent, false);
-        GenericPopup gpu = go.GetComponent<GenericPopup>();
+        GenericPopup gpu = GenericPopup.CreateGenericPopup();
         gpu.SetMainText(varNameText.text + ": " + feild.text);
         gpu.AddButton("Exit");
     }
