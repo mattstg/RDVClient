@@ -22,13 +22,21 @@ public class BlockSlotGUI : MonoBehaviour {
 
     public void DeleteReportPressed()
     {
-        DismissPopup popup = GV.reportBanUILinks.dismissPopup.GetComponent<DismissPopup>();
-        popup.Initialize(flaggedInfo);
-        popup.gameObject.SetActive(true);
+        GenericPopup gpu = GenericPopup.CreateGenericPopup();
+        string popupText = string.Format("Reported by {0}, ID: {1}, for reason of {2}, Are you sure you want to delete this report? The users will still be blocked to each other, but it will not count as an inappripriate flag",flaggedInfo.reporterName, flaggedInfo.reporterID,flaggedInfo.reason);
+        gpu.SetMainText(popupText);
+        gpu.AddButton("Yes, Delete report", DeleteBlockFromServer);
+        gpu.AddButton("Cancel");
     }
 
     public void OpenConvoPressed()
     {
         GV.reportBanUILinks.convoPopup.gameObject.SetActive(true);
+    }
+
+    public void DeleteBlockFromServer()
+    {
+        GV.accountRetriever.DeleteBlockFromServer(flaggedInfo);
+        GV.reportBanUILinks.banReportMS.OpenReportListPanel();
     }
 }

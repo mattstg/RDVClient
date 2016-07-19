@@ -39,15 +39,14 @@ public class AccountRetriever  {
                 }
                 else if (s == "tags")
                 {
-                    Debug.Log("tags happen");
-                    string allTags = "";
+                    /*string allTags = "";
                     for (int c = 0; c < json[i]["tags"].Count; c++)
                         allTags += json[i]["tags"][c].Value + ",";
-                    toRet.Add("tags", allTags);
+                    toRet.Add("tags", allTags);*/
+                    toRet.Add("tags", json[i]["tags"].ToString());
                 }
                 else
                 {
-                    Debug.Log("s == " + s);
                     KeyValuePair<string, string> kv = new KeyValuePair<string, string>(s, json[i][s].Value);
                     if (!toRet.ContainsKey(kv.Key))
                         toRet.Add(kv.Key, kv.Value);
@@ -64,7 +63,7 @@ public class AccountRetriever  {
     public void DeleteBlockFromServer(FlaggedInfo fi)
     {
         Debug.Log("delete from server called");
-
+        DeleteReport(fi.reporterID, fi.reportedID);
     }
 
     public void TestServerSendWriteRequest()
@@ -112,15 +111,30 @@ public class AccountRetriever  {
         for(int i = 0; i < json["playerBlocks"].Count; i++)
         {
             string reporter = json["playerBlocks"][i]["senderId"];
-            if (reporter != id)
+            string reason = json["playerBlocks"][i]["reportType"];
+            if (reporter != id && reason != "NONE")
             {
-                Debug.Log("getting reports for id: " + id + ", who is: " + GetAccountName(id));
-                Debug.Log("sender id: " + json["playerBlocks"][i]["senderId"] + ", who is: " + GetAccountName(json["playerBlocks"][i]["senderId"]));
                 FlaggedInfo newFlag = new FlaggedInfo(json["playerBlocks"][i]["lastUpdate"], json["playerBlocks"][i]["senderId"], GetAccountName(json["playerBlocks"][i]["senderId"]), json["playerBlocks"][i]["destId"], json["playerBlocks"][i]["reportType"]);
                 toRet.Add(newFlag);
             }
         }
         return toRet;
+    }
+
+    private JSONNode GetSpecificBlockReport(string senderId, string destId)
+    {
+        string jsonString = GetWebRequestJSON("player/block?accountId=" + destId);
+        JSONNode json = JSON.Parse(jsonString);
+        for (int i = 0; i < json["playerBlocks"].Count; i++)
+        {
+            JSONNode reportBlock = json["playerBlocks"][i];
+            string sender = json["playerBlocks"][i]["senderId"];
+            string dest = json["playerBlocks"][i]["destId"];
+            if (sender == senderId && destId == dest)
+                return reportBlock;
+        }
+        Debug.LogError("Not found");
+        return "";
     }
 
     public List<string> GetAllPictures(string id)
@@ -149,10 +163,29 @@ public class AccountRetriever  {
         return json["accountInfo"]["firstname"] + " " + json["accountInfo"]["lastname"];
     }
 
-    public bool DeleteReport(string senderId, string destId)
+    public void DeleteReport(string senderId, string destId)
     {
-        string deleteRequest = "player/block?senderId=" + senderId + "&destId" + destId;
-        return SendWebDeleteRequestJSON(deleteRequest);
+
+        JSONNode blockToDelete = GetSpecificBlockReport(senderId, destId); //first extract the report
+        blockToDelete["reportType"] = "NONE";  //set to a normal block
+
+        string deleteRequest = "player/block?senderId=" + senderId + "&destId=" + destId; //then delete the report
+        SendWebDeleteRequestJSON(deleteRequest);
+
+        //Then re-add the report, but modified
+        var baseAddress = serverAddress[activeServer] + "player/block";
+        var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+        http.Accept = "application/json";
+        http.ContentType = "application/json";
+        http.Method = "POST";
+        string parsedContent = blockToDelete.ToString();
+        ASCIIEncoding encoding = new ASCIIEncoding();
+        Byte[] bytes = encoding.GetBytes(parsedContent);
+
+        Stream newStream = http.GetRequestStream();
+        newStream.Write(bytes, 0, bytes.Length);
+        newStream.Close();
+        var response = http.GetResponse();
     }
 
     private string GetWebRequestJSON(string requestString)
