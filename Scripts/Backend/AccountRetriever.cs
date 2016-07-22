@@ -178,21 +178,25 @@ public class AccountRetriever  {
     {
 
         JSONNode blockToDelete = GetSpecificBlockReport(senderId, destId); //first extract the report
-        blockToDelete["reportType"] = "NONE";  //set to a normal block
-
-        string deleteRequest = "player/block?senderId=" + senderId + "&destId=" + destId; //then delete the report
+        
+        //then delete report
+        string deleteRequest = "player/block?senderId=" + senderId + "&destId=" + destId; 
         SendWebDeleteRequestJSON(deleteRequest);
 
         //Then re-add the report, but modified
-        
-        var baseAddress = serverAddress[activeServer] + "player/block";
+        blockToDelete["reportType"] = "NONE";  //set to a normal block
+        PutRequest("player/block", blockToDelete.ToString());
+    }
+
+    private void PutRequest(string requestString, string arg)
+    {
+        var baseAddress = serverAddress[activeServer] + requestString;
         var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
         http.Accept = "application/json";
         http.ContentType = "application/json";
         http.Method = "POST";
-        string parsedContent = blockToDelete.ToString();
         ASCIIEncoding encoding = new ASCIIEncoding();
-        Byte[] bytes = encoding.GetBytes(parsedContent);
+        Byte[] bytes = encoding.GetBytes(arg);
 
         Stream newStream = http.GetRequestStream();
         newStream.Write(bytes, 0, bytes.Length);
@@ -233,15 +237,26 @@ public class AccountRetriever  {
 
     public void PermaBanAccount(string id)
     {
-        /*string banJson = "{ \"accountId\": \"string\", \"startDate\": \"string\",  \"endDate\": \"string\",  \"canceledDate\": \"string\",  \"reason\": [ \"string\"  ], \"banStatus\": \"string\", \"nbrTemporaryBan\": 0, \"lastUpdate\": \"string\" }";
-        string jsonString = GetWebRequestJSON("player/accountBan/" + id);
-        JSONNode json = JSON.Parse(jsonString);*/
+        string jsonString = GetWebRequestJSON("accountBan/" + id);
+        JSONNode accountJson = JSON.Parse(jsonString);
+        accountJson["endDate"] = "";
+        accountJson["banStatus"] = "APPROVED";
+
+        PutRequest("player/block", accountJson.ToString());
     }
 
     public void ForgiveAccount(string id)
     {
+        string jsonString = GetWebRequestJSON("accountBan/" + id);
+        JSONNode accountJson = JSON.Parse(jsonString);
 
+        System.DateTime localDate = System.DateTime.Now;
+        string datetimeproper = localDate.Year + "-" + localDate.Month.ToString("00") + "-" + localDate.Day.ToString("00") + "T" + localDate.Hour.ToString("00") + ":" + localDate.Minute.ToString("00") + ":" + localDate.Second.ToString("00");
 
+        accountJson["canceledDate"] = datetimeproper;
+        accountJson["banStatus"] = "CANCELED";
+
+        PutRequest("accountBan/", accountJson.ToString());
     }
 
     

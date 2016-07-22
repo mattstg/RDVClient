@@ -11,7 +11,7 @@ public class BanReportMS : MonoBehaviour {
 
 	void Start () {
         RefreshUserList();
-	}
+    }
 
     public void RefreshUserList()
     {
