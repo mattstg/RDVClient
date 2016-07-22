@@ -11,11 +11,13 @@ using System.Linq;
 //Retrieves info, converts JSON into required type (dictionary mostly)
 public class AccountRetriever  {
 
-    string[] serverAddress = new string[] { " http://ord-rdvsupport-test-002.ludia.me:11000/rendezvous-support/", "http://ord-rdvsupport-test-001.ludia.me:11000/rendezvous-support/" };
+    string[] serverAddress = new string[] { "http://ord-rdvsupport-test-001.ludia.me:11000/rendezvous-support/" };
     int activeServer = 0;
 
     public List<string> RetrieveFlaggedAccounts()
     {
+        //string jsonString = GetWebRequestJSON("player/block?permanentBanForReview=true");
+        //JSONNode json = JSON.Parse(jsonString);
         return GV.fakeServer.GetFlaggedUsers("FlaggedUsers");
     }
 
@@ -55,9 +57,17 @@ public class AccountRetriever  {
         return toRet;
     }
 
-    public string RetrieveConvo(int fromID, int toID, Date date)
+    public Stack<MsgBlock> RetrieveConvo(string fromID, string toID, string date)
     {
-        return "Henri Hill: Hello there! '\n' CharcoalLover69: Hi!  '\n'   Henri Hill: ....  '\n'    Henri Hill: Wanna hear about what burns clean I'll tell you whut <Descriptive text of genocide of CharcoalLover69's racial ethenticity>";
+        string jsonString = GetWebRequestJSON("message?senderId=" + fromID + "&destId=" +toID);
+        JSONNode json = JSON.Parse(jsonString);
+        Stack<MsgBlock> msgStack = new Stack<MsgBlock>();
+        for(int i = 0; i < json["messages"].Count; i++)
+        {
+            MsgBlock msg = new MsgBlock(json["messages"][i]["createdDatetime"], json["messages"][i]["message"], GV.accountRetriever.GetAccountName(json["messages"][i]["senderId"]));
+            msgStack.Push(msg);
+        }
+        return msgStack;
     }
 
     public void DeleteBlockFromServer(FlaggedInfo fi)
@@ -112,7 +122,8 @@ public class AccountRetriever  {
         {
             string reporter = json["playerBlocks"][i]["senderId"];
             string reason = json["playerBlocks"][i]["reportType"];
-            if (reporter != id && reason != "NONE")
+            //if (reporter != id && reason != "NONE")
+            if (reporter != id)
             {
                 FlaggedInfo newFlag = new FlaggedInfo(json["playerBlocks"][i]["lastUpdate"], json["playerBlocks"][i]["senderId"], GetAccountName(json["playerBlocks"][i]["senderId"]), json["playerBlocks"][i]["destId"], json["playerBlocks"][i]["reportType"]);
                 toRet.Add(newFlag);
@@ -173,6 +184,7 @@ public class AccountRetriever  {
         SendWebDeleteRequestJSON(deleteRequest);
 
         //Then re-add the report, but modified
+        
         var baseAddress = serverAddress[activeServer] + "player/block";
         var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
         http.Accept = "application/json";
@@ -218,4 +230,19 @@ public class AccountRetriever  {
             return false;
         }
     }
+
+    public void PermaBanAccount(string id)
+    {
+        /*string banJson = "{ \"accountId\": \"string\", \"startDate\": \"string\",  \"endDate\": \"string\",  \"canceledDate\": \"string\",  \"reason\": [ \"string\"  ], \"banStatus\": \"string\", \"nbrTemporaryBan\": 0, \"lastUpdate\": \"string\" }";
+        string jsonString = GetWebRequestJSON("player/accountBan/" + id);
+        JSONNode json = JSON.Parse(jsonString);*/
+    }
+
+    public void ForgiveAccount(string id)
+    {
+
+
+    }
+
+    
 }

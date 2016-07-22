@@ -11,8 +11,13 @@ public class BlockSlotGUI : MonoBehaviour {
     public Text dateText; //the date the convo took  place
     private FlaggedInfo flaggedInfo;
 
+    string reporterId;
+    string reportedId;
+
     public void Initialize(FlaggedInfo fi)
     {
+        reporterId = fi.reporterID;
+        reportedId = fi.reportedID;
         flaggedInfo = fi;
         reporterIDText.text = fi.reporterID.ToString();
         reporterNameText.text = fi.reporterName.ToString();
@@ -32,6 +37,7 @@ public class BlockSlotGUI : MonoBehaviour {
     public void OpenConvoPressed()
     {
         GV.reportBanUILinks.convoPopup.gameObject.SetActive(true);
+        GV.reportBanUILinks.convoPopup.Initialize(flaggedInfo.reporterID, flaggedInfo.reportedID, flaggedInfo.date);
     }
 
     public void DeleteBlockFromServer()

@@ -37,14 +37,14 @@ public class BanForgivePopup : MonoBehaviour {
 
     public void BanConfirmed()
     {
-        Debug.Log("BAN CONFIRMED");
+        GV.accountRetriever.PermaBanAccount(accusedId);
         GV.reportBanUILinks.banReportMS.UserSelected("");
         ClosePressed();
     }
 
     public void ForgiveConfirmed()
     {
-        Debug.Log("FORGIVE CONFIRMED");
+        GV.accountRetriever.ForgiveAccount(accusedId);
         GV.reportBanUILinks.banReportMS.UserSelected("");
         ClosePressed();
     }
